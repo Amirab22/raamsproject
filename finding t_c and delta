@@ -1,0 +1,21 @@
+% Load the data
+t = [data_t];
+f = [data_f];
+
+% Define the fit function
+fun = @(p,t) p(1)*exp(-p(2)^2*p(3)^2*((t/p(3))+exp(-(t/p(3)))-1));
+
+% Set the starting point for the parameters
+p0 = [1, 1, 1];
+
+% Set the fitting options
+options = optimset('MaxIter', 10000, 'TolFun', 1e-6, 'TolX', 1e-6);
+
+% Fit the function to the data
+[p, mse, exitflag] = fminsearch(@(p) sum((f - fun(p,t)).^2), p0, options);
+
+% Print the results
+disp(['tc = ', num2str(p(3))]);
+disp(['delta = ', num2str(p(2))]);
+disp(['contrast = ', num2str(p(1))]);
+disp(['MSE = ', num2str(mse)]);
